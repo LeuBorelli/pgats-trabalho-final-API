@@ -1,0 +1,54 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main, work ]
+  pull_request:
+    branches: [ main, work ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      # Etapa 1: Clonar o repositório
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Etapa 2: Configurar o Node.js
+      - name: Usar Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Etapa 3: Instalar dependências
+      - name: Instalar dependências
+        run: npm install
+
+      # Etapa 4: Executar os testes
+      - name: Executar testes
+        run: npm run test-rest-controller
+
+      - name: Subir a API Rest
+        run: npm run start-rest &
+
+      - name: Subir a API GraphQL
+        run: npm run start-graphql &
+
+      - name: Esperar a API estar Funcionando
+        run: sleep 5
+
+      - name: Criar .env
+        run: |
+          echo "BASE_URL_REST=${{ secrets.BASE_URL_REST }}" >> .env
+          echo "BASE_URL_GRAPHQL=${{ secrets.BASE_URL_GRAPHQL }}" >> .env
+
+      - name: Rodar os testes de API Rest via HTTP
+        run: npm run test-rest-external
+
+      - name: Rodar os testes de API GraphQL via HTTP
+        run: npm run test-graphql-external
