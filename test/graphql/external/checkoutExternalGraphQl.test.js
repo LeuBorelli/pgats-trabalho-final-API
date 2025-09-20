@@ -15,7 +15,7 @@ describe('Teste de checkout', () => {
     })
 
     beforeEach(async () => {
-        chekoutSucesso = require('../fixture/requisicoes/checkout/chekoutComSucesso.json');
+        checkoutSucesso = require('../fixture/requisicoes/checkout/checkoutComSucesso.json');
     });
 
     it('Teste de checkout com pagamento via cartão de crédito', async () => {
@@ -23,13 +23,13 @@ describe('Teste de checkout', () => {
         const respostaCheckout = await request(process.env.BASE_URL_GRAPHQL)
             .post('')
             .set('Authorizations', `Bearer ${this.token}`)
-            .send(chekoutSucesso);
+            .send(checkoutSucesso);
 
         expect(respostaCheckout.status).to.equal(200);
         expect(respostaEsperada.data.checkout).to.deep.equal(respostaEsperada.data.checkout);
     });
 
-    const testesDeErroDeNegocio = require('../fixture/requisicoes/checkout/chekoutWithError.json');
+    const testesDeErroDeNegocio = require('../fixture/requisicoes/checkout/checkoutWithError.json');
 
     testesDeErroDeNegocio.forEach(testes => {
         it(`Testando a regra relacionado a ${testes.nomeDoTeste}`, async () => {

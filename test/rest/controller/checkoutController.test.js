@@ -20,7 +20,7 @@ describe('Checkout Controller', () => {
         });
 
         it('Quando envio dados válidos no checkout com pagamento via cartão de crédito, recebo uma resposta 200', async () => {
-            const postChekoutSucesso = require('../fixture/requisicoes/checkout/postChekoutSucesso.json');
+            const postCheckoutSucesso = require('../fixture/requisicoes/checkout/postCheckoutSucesso.json');
             const checkoutMock = sinon.stub(checkoutService, 'checkout');
             checkoutMock.returns({
                 userId: 1,
@@ -38,14 +38,15 @@ describe('Checkout Controller', () => {
             const resposta = await request(app)
                 .post('/api/checkout')
                 .set('Authorization', `Bearer ${token}`)
-                .send(postChekoutSucesso)
+                .send(postCheckoutSucesso)
                     const respostaEsperada = require('../fixture/respostas/checkout/quandoEnvioDadosValidosNoCheckoutReceboUmaResposta200.json');
                     expect(resposta.body).to.deep.equal(respostaEsperada);
                     expect(resposta.status).to.equal(200);
         });
 
         it('Quando envio dados válidos no checkout com pagamento via boleto, recebo uma resposta 200', async () => {
-            const postChekoutSucesso = require('../fixture/requisicoes/checkout/postChekoutSucesso.json');
+            const postCheckoutSucesso = require('../fixture/requisicoes/checkout/postCheckoutSucesso.json');
+            const respostaEsperada = require('../fixture/respostas/checkout/quandoEnvioDadosValidosNoCheckoutReceboUmaResposta200.json');
             const checkoutMock = sinon.stub(checkoutService, 'checkout');
             checkoutMock.returns({
                 userId: 1,
@@ -57,17 +58,17 @@ describe('Checkout Controller', () => {
                 ],
                 freight: 0,
                 paymentMethod: "boleto",
-                total: 190
+                total: 200
             });
-
             const resposta = await request(app)
                 .post('/api/checkout')
                 .set('Authorization', `Bearer ${token}`)
-                .send(postChekoutSucesso)
-                    const respostaEsperada = require('../fixture/respostas/checkout/quandoEnvioDadosValidosNoCheckoutReceboUmaResposta200.json');
-                    respostaEsperada.paymentMethod = "boleto";
-                    expect(resposta.body).to.deep.equal(respostaEsperada);
-                    expect(resposta.status).to.equal(200);
+                .send(postCheckoutSucesso);
+            respostaEsperada.paymentMethod = "boleto";
+            respostaEsperada.total = 200;
+            respostaEsperada.valorFinal = 200;
+            expect(resposta.body).to.deep.equal(respostaEsperada);
+            expect(resposta.status).to.equal(200);
         });
 
         it('Checkout sem preencher os dados do cartão, recebo 400', async () => {

@@ -15,17 +15,17 @@ describe('Checkout Controller', () => {
         });
 
         it('Quando envio dados válidos no checkout com pagamento via cartão de crédito, recebo uma resposta 200', async () => {
-            const postChekoutSucesso = require('../fixture/requisicoes/checkout/postChekoutSucesso.json');
+            const postCheckoutSucesso = require('../fixture/requisicoes/checkout/postCheckoutSucesso.json');
             const resposta = await request(process.env.BASE_URL_REST)
                 .post('/api/checkout')
                 .set('Authorization', `Bearer ${token}`)
-                .send(postChekoutSucesso)
+                .send(postCheckoutSucesso)
             const respostaEsperada = require('../fixture/respostas/checkout/quandoEnvioDadosValidosNoCheckoutReceboUmaResposta200.json');
             expect(resposta.body).to.deep.equal(respostaEsperada);
             expect(resposta.status).to.equal(200);
         });
 
-        const testesDeErroDeNegocio = require('../fixture/requisicoes/checkout/postChekoutWithError.json')
+        const testesDeErroDeNegocio = require('../fixture/requisicoes/checkout/postCheckoutWithError.json')
 
         testesDeErroDeNegocio.forEach(teste => {
             it(`Testando a regra relacionada a ${teste.nomeDoTeste}`, async () => {
