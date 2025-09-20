@@ -25,7 +25,6 @@
   "homepage": "https://github.com/juliodelimas/pgats-2025-02-base#readme",
   "dependencies": {
     "apollo-server-express": "^3.13.0",
-    "chai": "^6.0.1",
     "express": "^4.21.2",
     "graphql": "^16.11.0",
     "jsonwebtoken": "^9.0.2",
@@ -35,6 +34,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "chai": "^4.3.7",
     "dotenv": "^17.2.2",
     "mochawesome": "^7.1.4"
   }
